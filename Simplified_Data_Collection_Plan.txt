@@ -1,0 +1,31 @@
+
+Data Collection Plan: Simple Version
+
+Objective: 
+To collect and analyze WiFi traffic data from an Alexa Echo Dot using a Raspberry Pi configured as a WiFi router and data collector.
+
+Steps:
+1. Configure Raspberry Pi:
+   - Set up the Raspberry Pi as a WiFi router.
+   - Ensure it can monitor and capture WiFi traffic data.
+2. Detect Alexa Echo Dot Traffic:
+   - Identify the Alexa Echo Dot's WiFi traffic based on its IP address.
+   - Use network analysis tools or scripts to capture relevant data.
+3. Use Tacotron2 for Speech Synthesis:
+   - Implement Tacotron2 to convert text (C) into speech (A).
+   - Prepare the necessary computational resources and expertise.
+4. Interaction and Data Capture:
+   - Play the synthesized speech to the Alexa Echo Dot.
+   - Simultaneously capture the WiFi traffic data generated during this interaction.
+
+Considerations:
+- Ensure accurate identification of the Alexa Echo Dot's IP address.
+- Optimize the Raspberry Pi for continuous data monitoring.
+- Validate the quality of the synthesized speech for clarity and naturalness.
+- Record the timing and details of each data capture session for analysis.
+
+Data Analysis:
+- Analyze the captured WiFi traffic data to understand interaction patterns.
+- Correlate audio inputs (speech) with variations in WiFi traffic.
+
+
