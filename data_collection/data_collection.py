@@ -1,30 +1,33 @@
-from detect_traffic import start_traffic_detection
-# from recording import record_audio
-import threading
+import os
 import time
+import subprocess
+import pygame
 
-# Parameters for traffic detection and audio recording
-INTERFACE = 'wlan0'
-MONITOR_IP = '10.3.141.158'  # Replace with the IP you want to monit or
-# RECORD_SECONDS = 10
-# OUTPUT_FILENAME = 'traffic_audio.wav'
+# Initialize the mixer module
+pygame.mixer.init()
 
-def monitor_traffic_and_record():
-    # Start a separate thread for traffic detection
-    traffic_thread = threading.Thread(target=start_traffic_detection, args=(INTERFACE, MONITOR_IP))
-    traffic_thread.start()
+# Set your directories
+audio_dir = 'path/to/your/audio_files'
 
-    # Wait for a certain condition or a specific event
-    # For example, wait for 30 seconds before starting recording
-    # time.sleep(30)
+# List of audio files
+audio_files = sorted([f for f in os.listdir(audio_dir) if f.endswith('.wav')])
 
-    # Start audio recording
-    print("Starting audio recording...")
-    # record_audio(RECORD_SECONDS, OUTPUT_FILENAME)
-    print("Audio recording finished.")
+# Function to play audio
+def play_audio(file_path):
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy():
+        time.sleep(1)
 
-    # Here you can add logic to stop the traffic detection if necessary
-    # For example, if you have a mechanism to stop it after a certain event
-
-if __name__ == "__main__":
-    monitor_traffic_and_record()
+# Play audio files one by one
+for audio_file in audio_files:
+    full_path = os.path.join(audio_dir, audio_file)
+    print(f"Playing {audio_file}")
+    play_audio(full_path)
+    # Start traffic capture here
+    # subprocess.Popen(['sudo', 'tcpdump', '-i', 'eth0', '-w', f'path/to/your/traffic_data/{audio_file}.pcap'])
+    # Wait for the duration of the audio file
+    # time.sleep(audio_duration)
+    # Stop traffic capture here
+    # subprocess.Popen(['sudo', 'pkill', 'tcpdump'])
+    print(f"Finished playing {audio_file}")
