@@ -14,7 +14,7 @@ def main():
     capture_dir = ' traffic_W'
 
     total_files = 101
-    for i in range(1, total_files + 1):
+    for i in range(10, total_files + 1):
         audio_file_name = f"{remote_audio_dir}/{i}_audio.wav"
         capture_file = f"{capture_dir}/{i}_traffic.pcap"
         run_play_audio_script(script_path, remote_username, remote_ip, audio_file_name, password, capture_file)
