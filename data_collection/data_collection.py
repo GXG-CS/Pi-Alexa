@@ -1,33 +1,25 @@
-import os
-import time
 import subprocess
-import pygame
+import os
 
-# Initialize the mixer module
-pygame.mixer.init()
+def run_play_audio_script(script_path, remote_username, remote_ip, audio_file_path, password, capture_file):
+    command = f"python {script_path} --remote_username {remote_username} --remote_ip {remote_ip} --remote_audio_dir {audio_file_path} --password {password} --capture_file {capture_file}"
+    subprocess.run(command, shell=True)
 
-# Set your directories
-audio_dir = 'path/to/your/audio_files'
+def main():
+    script_path = 'remote_playAudio.py'
+    remote_username = 'xiaoguang_guo@mines.edu'
+    remote_ip = '192.168.1.232'
+    remote_audio_dir = '/Users/xiaoguang_guo@mines.edu/Documents/Pi-Alexa/data_collection/audio_A'
+    password = '338166'
+    capture_dir = ' traffic_W'
 
-# List of audio files
-audio_files = sorted([f for f in os.listdir(audio_dir) if f.endswith('.wav')])
+    total_files = 101
+    for i in range(1, total_files + 1):
+        audio_file_name = f"{remote_audio_dir}/{i}_audio.wav"
+        capture_file = f"{capture_dir}/{i}_traffic.pcap"
+        run_play_audio_script(script_path, remote_username, remote_ip, audio_file_name, password, capture_file)
 
-# Function to play audio
-def play_audio(file_path):
-    pygame.mixer.music.load(file_path)
-    pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy():
-        time.sleep(1)
 
-# Play audio files one by one
-for audio_file in audio_files:
-    full_path = os.path.join(audio_dir, audio_file)
-    print(f"Playing {audio_file}")
-    play_audio(full_path)
-    # Start traffic capture here
-    # subprocess.Popen(['sudo', 'tcpdump', '-i', 'eth0', '-w', f'path/to/your/traffic_data/{audio_file}.pcap'])
-    # Wait for the duration of the audio file
-    # time.sleep(audio_duration)
-    # Stop traffic capture here
-    # subprocess.Popen(['sudo', 'pkill', 'tcpdump'])
-    print(f"Finished playing {audio_file}")
+
+if __name__ == "__main__":
+    main()
