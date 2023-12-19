@@ -12,10 +12,11 @@ def play_audio(file_path):
 
 def capture_traffic(output_file, duration):
     try:
-        # Use tcpdump to capture traffic for a specified duration, saving to the output file
-        subprocess.run(['sudo', 'tcpdump', '-w', output_file, '-G', str(duration), '-W', '1'])
+        # Use tcpdump to capture traffic on wlan0 for a specified duration, saving to the output file
+        subprocess.run(['sudo', 'tcpdump', '-i', 'wlan0', '-w', output_file, '-G', str(duration), '-W', '1'])
     except Exception as e:
         print(f"Error capturing traffic: {e}")
+
 
 if __name__ == "__main__":
     # Create an argument parser
@@ -39,3 +40,5 @@ if __name__ == "__main__":
 
     # Wait for the capture thread to finish
     capture_thread.join()
+
+# python play_Capture.py audio_A/2_audio.wav traffic_W/test2.pcap --duration 20

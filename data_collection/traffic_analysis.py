@@ -64,3 +64,5 @@ if __name__ == "__main__":
         plot_traffic_curve(incoming_rates, outgoing_rates)
     else:
         print("No traffic found for the specified MAC address.")
+
+#  python traffic_analysis.py traffic_W/test2.pcap 
