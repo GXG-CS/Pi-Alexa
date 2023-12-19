@@ -1,27 +1,33 @@
-from scapy.all import rdpcap, Ether
+from scapy.all import rdpcap, IP
 import matplotlib.pyplot as plt
 import argparse
-import datetime
+from datetime import datetime
 
-def analyze_traffic(pcap_file, device_mac):
+ALEXA_IP = '10.3.141.158'
+AMAZON_SERVER_IP = '44.199.80.228'
+
+def analyze_traffic(pcap_file):
     packets = rdpcap(pcap_file)
+    print(f"Total number of packets in the pcap file: {len(packets)}")
+
     timestamps_incoming = []
     timestamps_outgoing = []
     sizes_incoming = []
     sizes_outgoing = []
 
     for packet in packets:
-        if Ether in packet:
-            packet_time = datetime.datetime.fromtimestamp(packet.time)
+        if IP in packet:
+            # Convert packet.time to a float explicitly to avoid DeprecationWarning
+            packet_time = datetime.fromtimestamp(float(packet.time))
             packet_size = len(packet) * 8 / 1024  # Convert bytes to Kilobits
 
-            # Check if the packet is incoming or outgoing based on MAC address
-            if packet[Ether].dst.lower() == device_mac.lower():
-                timestamps_incoming.append(packet_time.timestamp())
-                sizes_incoming.append(packet_size)
-            elif packet[Ether].src.lower() == device_mac.lower():
+            # Check if the packet is incoming or outgoing based on IP addresses
+            if packet[IP].src == ALEXA_IP and packet[IP].dst == AMAZON_SERVER_IP:
                 timestamps_outgoing.append(packet_time.timestamp())
                 sizes_outgoing.append(packet_size)
+            elif packet[IP].src == AMAZON_SERVER_IP and packet[IP].dst == ALEXA_IP:
+                timestamps_incoming.append(packet_time.timestamp())
+                sizes_incoming.append(packet_size)
 
     return timestamps_incoming, sizes_incoming, timestamps_outgoing, sizes_outgoing
 
@@ -47,22 +53,29 @@ def plot_traffic_curve(incoming_rates, outgoing_rates):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+
+    # Save the figure to a file instead of displaying it
+    plt.savefig('traffic_rate_plot.png', dpi=300)
+    print("Plot saved as traffic_rate_plot.png")
+
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Analyze a pcap file and plot traffic rates for a given MAC address.')
+    parser = argparse.ArgumentParser(description='Analyze a pcap file and plot traffic rates for Alexa and Amazon server.')
     parser.add_argument('pcap_file', type=str, help='The path to the pcap file to analyze')
-    parser.add_argument('device_mac', type=str, help='The MAC address of the Alexa device')
 
     args = parser.parse_args()
 
-    timestamps_incoming, sizes_incoming, timestamps_outgoing, sizes_outgoing = analyze_traffic(args.pcap_file, args.device_mac)
+    print("Starting traffic analysis...")
+    timestamps_incoming, sizes_incoming, timestamps_outgoing, sizes_outgoing = analyze_traffic(args.pcap_file)
+
+    print(f"Incoming packets: {len(timestamps_incoming)}")
+    print(f"Outgoing packets: {len(timestamps_outgoing)}")
 
     if timestamps_incoming and timestamps_outgoing:
+        print("Aggregating traffic rates...")
         incoming_rates = aggregate_traffic(timestamps_incoming, sizes_incoming)
         outgoing_rates = aggregate_traffic(timestamps_outgoing, sizes_outgoing)
+        print("Plotting traffic rates...")
         plot_traffic_curve(incoming_rates, outgoing_rates)
     else:
-        print("No traffic found for the specified MAC address.")
-
-#  python traffic_analysis.py traffic_W/test2.pcap 
+        print("No traffic found for the specified IP addresses.")
