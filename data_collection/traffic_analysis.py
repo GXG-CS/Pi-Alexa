@@ -4,7 +4,7 @@ import argparse
 from datetime import datetime
 
 ALEXA_IP = '10.3.141.158'
-AMAZON_SERVER_IP = '44.199.80.228'
+AMAZON_SERVER_IPS = ['44.199.80.228', '3.223.181.245', '44.199.80.230']  # Example list of server IPs
 
 def analyze_traffic(pcap_file):
     packets = rdpcap(pcap_file)
@@ -17,15 +17,13 @@ def analyze_traffic(pcap_file):
 
     for packet in packets:
         if IP in packet:
-            # Convert packet.time to a float explicitly to avoid DeprecationWarning
             packet_time = datetime.fromtimestamp(float(packet.time))
             packet_size = len(packet) * 8 / 1024  # Convert bytes to Kilobits
 
-            # Check if the packet is incoming or outgoing based on IP addresses
-            if packet[IP].src == ALEXA_IP and packet[IP].dst == AMAZON_SERVER_IP:
+            if packet[IP].src == ALEXA_IP and packet[IP].dst in AMAZON_SERVER_IPS:
                 timestamps_outgoing.append(packet_time.timestamp())
                 sizes_outgoing.append(packet_size)
-            elif packet[IP].src == AMAZON_SERVER_IP and packet[IP].dst == ALEXA_IP:
+            elif packet[IP].src in AMAZON_SERVER_IPS and packet[IP].dst == ALEXA_IP:
                 timestamps_incoming.append(packet_time.timestamp())
                 sizes_incoming.append(packet_size)
 
@@ -54,10 +52,8 @@ def plot_traffic_curve(incoming_rates, outgoing_rates):
     plt.grid(True)
     plt.tight_layout()
 
-    # Save the figure to a file instead of displaying it
-    plt.savefig('traffic_rate_plot.png', dpi=300)
-    print("Plot saved as traffic_rate_plot.png")
-
+    plt.savefig('traffic_rate_plot2.png', dpi=300)
+    print("Plot saved as traffic_rate_plot2.png")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze a pcap file and plot traffic rates for Alexa and Amazon server.')
@@ -75,7 +71,11 @@ if __name__ == "__main__":
         print("Aggregating traffic rates...")
         incoming_rates = aggregate_traffic(timestamps_incoming, sizes_incoming)
         outgoing_rates = aggregate_traffic(timestamps_outgoing, sizes_outgoing)
+
         print("Plotting traffic rates...")
         plot_traffic_curve(incoming_rates, outgoing_rates)
     else:
         print("No traffic found for the specified IP addresses.")
+
+
+# python traffic_analysis.py traffic_W/test2.pcap 
