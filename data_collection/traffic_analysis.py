@@ -4,7 +4,7 @@ import argparse
 from datetime import datetime
 
 ALEXA_IP = '10.3.141.158'
-AMAZON_SERVER_IPS = ['44.199.80.228', '3.223.181.245', '44.199.80.230']  # Example list of server IPs
+AMAZON_SERVER_IPS = ['44.199.80.228', '3.223.181.245', '54.167.177.211']  # Example list of server IPs
 
 def analyze_traffic(pcap_file):
     packets = rdpcap(pcap_file)
@@ -52,8 +52,8 @@ def plot_traffic_curve(incoming_rates, outgoing_rates):
     plt.grid(True)
     plt.tight_layout()
 
-    plt.savefig('traffic_rate_plot2.png', dpi=300)
-    print("Plot saved as traffic_rate_plot2.png")
+    plt.savefig('traffic_rate_plot7.png', dpi=300)
+    print("Plot saved as traffic_rate_plot7.png")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze a pcap file and plot traffic rates for Alexa and Amazon server.')

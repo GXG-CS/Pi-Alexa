@@ -2,45 +2,62 @@ import argparse
 import subprocess
 import threading
 import time
+from scapy.all import sniff, IP, wrpcap
+from datetime import datetime
+
+SLEEP_TIME = 10  # Sleep for 2 seconds before playing the audio
+DURATION = 10   # Capture for 10 seconds during and after audio playback
 
 def play_audio(file_path):
     try:
-        # Use the aplay command to play the audio file
-        subprocess.run(['aplay', file_path])
-    except Exception as e:
+        print("Starting audio playback...")
+        subprocess.run(['aplay', file_path], check=True)
+        print("Audio playback has ended.")
+    except subprocess.CalledProcessError as e:
         print(f"Error playing audio: {e}")
 
-def capture_traffic(output_file, duration):
-    try:
-        # Use tcpdump to capture traffic on wlan0 for a specified duration, saving to the output file
-        # The actual duration includes the 2-second delay before playing audio
-        subprocess.run(['sudo', 'tcpdump', '-i', 'wlan0', '-w', output_file, '-G', str(duration + 2), '-W', '1'])
-    except Exception as e:
-        print(f"Error capturing traffic: {e}")
+def packet_handler(packet):
+    if IP in packet:
+        timestamp = datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S.%f')
+        print(f"Packet: {timestamp}, Source: {packet[IP].src}, Destination: {packet[IP].dst}, Length: {len(packet)}")
 
+def capture_traffic(interface, output_file, duration):
+    print("Starting traffic capture...")
+    packets = sniff(iface=interface, prn=packet_handler, timeout=duration)
+    print("Traffic capture has ended.")
+    wrpcap(output_file, packets)
+    print("Packets saved to {} successfully.".format(output_file))
+
+def sleep_with_announcements():
+    print("Entering sleep period...")
+    for i in range(SLEEP_TIME):
+        time.sleep(1)
+        print(f"Slept for {i + 1} seconds...")
+    print("Exiting sleep period.")
 
 if __name__ == "__main__":
-    # Create an argument parser
-    parser = argparse.ArgumentParser(description='Play a WAV file and capture traffic.')
-    parser.add_argument('file_path', type=str, help='Path to the WAV file to play')
-    parser.add_argument('output_file', type=str, help='Path to save the traffic capture file')
-    parser.add_argument('--duration', type=int, default=30, help='Duration to capture traffic (in seconds)')
+    parser = argparse.ArgumentParser(description='Play a WAV file and capture network traffic.')
+    parser.add_argument('file_path', type=str, help='Path to the WAV file to play.')
+    parser.add_argument('output_file', type=str, help='Path to save the traffic capture file.')
 
-    # Parse the command line arguments
     args = parser.parse_args()
 
-    # Start traffic capture in a separate thread
-    capture_thread = threading.Thread(target=capture_traffic, args=(args.output_file, args.duration))
+    # Start traffic capture in a separate thread immediately
+    capture_thread = threading.Thread(target=capture_traffic, args=('wlan0', args.output_file, DURATION + SLEEP_TIME))
     capture_thread.start()
 
-    # Wait for 2 seconds before playing the audio
-    time.sleep(2)
+    # Sleep with announcements
+    sleep_with_announcements()
 
-    # Play the audio
+    # Play the audio file
     play_audio(args.file_path)
 
     # Wait for the capture thread to finish
     capture_thread.join()
 
+    print("Script has completed all operations.")
 
-# python play_Capture.py audio_A/2_audio.wav traffic_W/test2.pcap --duration 20
+
+
+
+# sudo python play_Capture.py audio_A/7_audio.wav traffic_W/test7.pcap 
