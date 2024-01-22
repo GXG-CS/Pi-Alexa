@@ -6,6 +6,7 @@ from datetime import datetime
 ALEXA_IP = '10.3.141.158'
 AMAZON_SERVER_IPS = ['44.199.80.228', '3.223.181.245', '54.167.177.211']  # Example list of server IPs
 
+
 def analyze_traffic(pcap_file):
     packets = rdpcap(pcap_file)
     print(f"Total number of packets in the pcap file: {len(packets)}")
