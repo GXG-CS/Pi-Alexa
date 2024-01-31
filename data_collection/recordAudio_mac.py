@@ -1,11 +1,6 @@
 import sounddevice as sd
-import numpy as np
 import wavio
-
-# Function to list available devices
-# def list_devices():
-#     print("Available audio devices:")
-#     print(sd.query_devices())
+import argparse
 
 def record_audio(filename, duration=5, fs=44100, channels=1):
     print("Recording...")
@@ -17,10 +12,12 @@ def record_audio(filename, duration=5, fs=44100, channels=1):
 
     print(f"Recording finished, file saved as {filename}")
 
-# List available devices
-# list_devices()
+def main():
+    parser = argparse.ArgumentParser(description="Record audio and save as WAV file.")
+    parser.add_argument('output_file', type=str, help="Output WAV file name.")
+    args = parser.parse_args()
 
-# Recording settings
-output_file = 'output.wav'
-record_seconds = 5
-record_audio(output_file, record_seconds)
+    record_audio(args.output_file)
+
+if __name__ == "__main__":
+    main()
