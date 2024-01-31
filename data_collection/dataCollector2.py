@@ -5,6 +5,7 @@ import wavio
 import argparse
 import paramiko
 import time
+import threading
 from datetime import datetime
 
 class SSHConnection:
@@ -33,12 +34,23 @@ def get_timestamp():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 def play_audio(file):
+    print(f"{get_timestamp()}: Starting to play audio file: {file}")
     subprocess.call(["afplay", file])
+    print(f"{get_timestamp()}: Finished playing audio file: {file}")
 
 def record_audio(filename, duration=10, fs=44100, channels=1):
+    print(f"{get_timestamp()}: Starting to record audio. File will be saved as: {filename}")
     audio_data = sd.rec(int(duration * fs), samplerate=fs, channels=channels)
     sd.wait()  # Wait until recording is finished
     wavio.write(filename, audio_data, fs, sampwidth=2)
+    print(f"{get_timestamp()}: Finished recording audio. File saved as: {filename}")
+
+def play_and_record(audio_file, audio_dir, record_dir, record_duration):
+    full_audio_path = os.path.join(audio_dir, audio_file)
+    record_file = os.path.join(record_dir, f"recorded_{os.path.splitext(audio_file)[0]}.wav")
+
+    play_audio(full_audio_path)
+    record_audio(record_file, duration=record_duration)
 
 def main(ip, username, password, audio_dir, record_dir, record_duration, key_filepath=None):
     if not os.path.exists(record_dir):
@@ -47,34 +59,22 @@ def main(ip, username, password, audio_dir, record_dir, record_duration, key_fil
     with SSHConnection(ip, username, password, key_filepath) as ssh:
         for audio_file in os.listdir(audio_dir):
             if audio_file.endswith('.wav'):
-                full_audio_path = os.path.join(audio_dir, audio_file)
                 pcap_filename = f"/opt/tcpdump/{os.path.splitext(audio_file)[0]}.pcap"
+                print(f"{get_timestamp()}: Starting capture of network traffic. Captured data will be saved in: {pcap_filename}")
 
-                # Start capture
-                print(f"{get_timestamp()}: Starting capture")
-                tcpdump_command = f"nohup tcpdump -i any -w {pcap_filename} &"
+                tcpdump_command = f"sh -c 'nohup tcpdump -i any -w {pcap_filename} > /dev/null 2>&1 &'"
                 ssh.execute_command(tcpdump_command)
 
-                # Play audio and record the start time
-                print(f"{get_timestamp()}: Playing {audio_file}")
-                start_time = datetime.now()
-                play_audio(full_audio_path)
+                audio_thread = threading.Thread(target=play_and_record, args=(audio_file, audio_dir, record_dir, record_duration))
+                audio_thread.start()
 
-                # Record audio
-                record_file = os.path.join(record_dir, f"recorded_{os.path.splitext(audio_file)[0]}.wav")
-                print(f"{get_timestamp()}: Recording {audio_file} for {record_duration} seconds")
-                record_audio(record_file, duration=record_duration)
+                time.sleep(20)
 
-                # Calculate elapsed time and wait for the remaining time of the 20-second window
-                elapsed_time = (datetime.now() - start_time).total_seconds()
-                remaining_time = max(20 - elapsed_time, 0)
-                if remaining_time > 0:
-                    time.sleep(remaining_time)
-
-                # Stop capture
-                print(f"{get_timestamp()}: Stopping capture")
+                print(f"{get_timestamp()}: Stopping network traffic capture.")
                 ssh.execute_command("pkill -SIGINT tcpdump")
 
+                audio_thread.join()
+                print(f"{get_timestamp()}: Audio play and record cycle completed for: {audio_file}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Play audio files and record with network traffic capture on Raspberry Pi.')

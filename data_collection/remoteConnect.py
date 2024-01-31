@@ -9,7 +9,17 @@ def run_command_on_pi(ip, username, password, command):
     ssh.connect(ip, username=username, password=password)
 
     stdin, stdout, stderr = ssh.exec_command(command)
-    print(stdout.read().decode())
+
+    # Wait for the command to complete and capture the output
+    stdout.channel.recv_exit_status()
+    output = stdout.read().decode()
+    error = stderr.read().decode()
+
+    print("Command Output:\n", output)
+    if error:
+        print("Command Error:\n", error)
+    else:
+        print("Command executed successfully. 'tcpdump' should now be running.")
 
     ssh.close()
 
@@ -27,3 +37,6 @@ def main():
 if __name__ == "__main__":
     main()
 
+
+# python remoteConnect.py 192.168.1.167 root raspberry "nohup tcpdump -i any -w /opt/tcpdump/audio4.pcap &"
+# python remoteConnect.py 192.168.1.167 root raspberry "pkill -SIGINT tcpdump"
