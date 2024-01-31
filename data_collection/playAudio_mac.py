@@ -4,7 +4,7 @@ import subprocess
 def play_audio(file_path):
     try:
         # Use the aplay command to play the audio file
-        subprocess.run(['aplay', file_path])
+        subprocess.run(['afplay', file_path])
     except Exception as e:
         print(f"Error playing audio: {e}")
 
