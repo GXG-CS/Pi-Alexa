@@ -71,7 +71,9 @@ def main(ip, username, password, audio_dir, record_dir, record_duration, key_fil
                 time.sleep(20)
 
                 print(f"{get_timestamp()}: Stopping network traffic capture.")
-                ssh.execute_command("pkill -SIGINT tcpdump")
+                # ssh.execute_command("pkill -SIGINT tcpdump")
+                ssh.execute_command("ps | grep '[t]cpdump' | awk '{print $1}' | xargs -r kill -SIGINT")
+
 
                 audio_thread.join()
                 print(f"{get_timestamp()}: Audio play and record cycle completed for: {audio_file}")
@@ -88,3 +90,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main(args.ip, args.username, args.password, args.audio_dir, args.record_dir, args.duration, args.key_filepath)
+
+# python dataCollector2.py --ip 192.168.1.1 --username root --password raspberry --audio_dir audioPlay_A --record_dir audioRecord_C

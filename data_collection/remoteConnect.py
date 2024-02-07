@@ -19,7 +19,7 @@ def run_command_on_pi(ip, username, password, command):
     if error:
         print("Command Error:\n", error)
     else:
-        print("Command executed successfully. 'tcpdump' should now be running.")
+        print("Command executed successfully.")
 
     ssh.close()
 
