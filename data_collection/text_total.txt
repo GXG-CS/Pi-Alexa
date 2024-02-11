@@ -1,0 +1,100 @@
+Alexa, what is seven plus four?
+Alexa, what is twenty minus eight?
+Alexa, what is nine times three?
+Alexa, what is eighteen divided by three?
+Alexa, what is the square of five?
+Alexa, what is the square root of eighty-one?
+Alexa, what is fifteen percent of two hundred?
+Alexa, how many kilometers in a mile?
+Alexa, convert twenty degrees Celsius to Fahrenheit.
+Alexa, how many days until July fourth?
+Alexa, what is three plus six?
+Alexa, what is fourteen minus six?
+Alexa, what is seven times four?
+Alexa, what is twenty-four divided by four?
+Alexa, what is the square of eight?
+Alexa, what is the square root of forty-nine?
+Alexa, what is twenty-five percent of eighty?
+Alexa, how many liters in a gallon?
+Alexa, convert ten degrees Celsius to Fahrenheit.
+Alexa, how many days until New Year's Eve?
+Alexa, what is four plus seven?
+Alexa, what is thirty minus fifteen?
+Alexa, what is eight times five?
+Alexa, what is thirty-two divided by eight?
+Alexa, what is the square of twelve?
+Alexa, what is the square root of thirty-six?
+Alexa, what is fifty percent of one hundred?
+Alexa, how many meters in a kilometer?
+Alexa, convert twenty-five degrees Celsius to Fahrenheit.
+Alexa, how many days until Easter?
+Alexa, what is five plus nine?
+Alexa, what is sixteen minus nine?
+Alexa, what is four times six?
+Alexa, what is forty divided by five?
+Alexa, what is the square of ten?
+Alexa, what is the square root of twenty-five?
+Alexa, what is five percent of fifty?
+Alexa, how many yards in a meter?
+Alexa, convert zero degrees Celsius to Fahrenheit.
+Alexa, how many days until Thanksgiving?
+Alexa, what is two plus eight?
+Alexa, what is nineteen minus nine?
+Alexa, what is five times five?
+Alexa, what is forty-five divided by nine?
+Alexa, what is the square of eleven?
+Alexa, what is the square root of sixty-four?
+Alexa, what is twenty percent of one hundred and fifty?
+Alexa, how many grams in an ounce?
+Alexa, convert thirty-five degrees Celsius to Fahrenheit.
+Alexa, how many days until my birthday?
+Alexa, what is ten plus two?
+Alexa, what is twenty-five minus five?
+Alexa, what is six times seven?
+Alexa, what is fifty-six divided by eight?
+Alexa, what is the square of fifteen?
+Alexa, what is the square root of one hundred?
+Alexa, what is seventy-five percent of forty?
+Alexa, how many ounces in a pound?
+Alexa, convert forty degrees Celsius to Fahrenheit.
+Alexa, how many days until Halloween?
+Alexa, what is one plus eleven?
+Alexa, what is twenty-two minus two?
+Alexa, what is three times nine?
+Alexa, what is twenty-seven divided by three?
+Alexa, what is the square of fourteen?
+Alexa, what is the square root of nine?
+Alexa, what is ten percent of sixty?
+Alexa, how many inches in a foot?
+Alexa, convert five degrees Celsius to Fahrenheit.
+Alexa, how many days until Christmas?
+Alexa, what is thirteen plus seven?
+Alexa, what is twenty-four minus twelve?
+Alexa, what is two times twelve?
+Alexa, what is fifty divided by ten?
+Alexa, what is the square of sixteen?
+Alexa, what is the square root of one hundred and twenty-one?
+Alexa, what is thirty-three percent of ninety?
+Alexa, how many minutes in an hour?
+Alexa, convert fifteen degrees Celsius to Fahrenheit.
+Alexa, how many weeks until summer?
+Alexa, what is seventeen plus three?
+Alexa, what is forty minus twenty?
+Alexa, what is eleven times eleven?
+Alexa, what is one hundred divided by twenty-five?
+Alexa, what is the square of seven?
+Alexa, what is the square root of one hundred and forty-four?
+Alexa, what is sixty percent of fifty?
+Alexa, how many seconds in a minute?
+Alexa, convert fifty degrees Celsius to Fahrenheit.
+Alexa, how many months until next year?
+Alexa, what is thirteen plus six?
+Alexa, what is twenty-eight minus fourteen?
+Alexa, what is two times twelve?
+Alexa, what is fifty divided by ten?
+Alexa, what is the square of sixteen?
+Alexa, what is the square root of one hundred and twenty-one?
+Alexa, what is thirty-three percent of ninety?
+Alexa, how many minutes in an hour?
+Alexa, convert forty-five degrees Celsius to Fahrenheit.
+Alexa, how many weeks until New Year's Day?
