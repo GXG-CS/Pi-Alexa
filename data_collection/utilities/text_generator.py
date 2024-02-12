@@ -1,119 +1,40 @@
-# List of sentences to write to files
-sentences = [
-    "Alexa, what's the date today?",
-    "Alexa, set an alarm for 6 AM.",
-    "Alexa, what's the temperature outside?",
-    "Alexa, remind me to check the mail at 5 PM.",
-    "Alexa, how long will it take to drive to downtown?",
-    "Alexa, add apples to my shopping list.",
-    "Alexa, how many ounces in a pound?",
-    "Alexa, tell me a fun fact.",
-    "Alexa, how do you spell 'encyclopedia'?",
-    "Alexa, what's the capital of France?",
-    "Alexa, set a timer for 20 minutes.",
-    "Alexa, when is sunset today?",
-    "Alexa, what's the news headline?",
-    "Alexa, find me a chicken recipe.",
-    "Alexa, what's my schedule for tomorrow?",
-    "Alexa, turn off the bedroom light.",
-    "Alexa, give me a weather update.",
-    "Alexa, how far is the moon?",
-    "Alexa, what's the definition of 'altruism'?",
-    "Alexa, who is the president of the United States?",
-    "Alexa, set a reminder for my doctor's appointment.",
-    "Alexa, what are the latest sports scores?",
-    "Alexa, how do I make a margarita?",
-    "Alexa, what movies are playing tonight?",
-    "Alexa, what time is it in Tokyo?",
-    "Alexa, convert 10 kilometers to miles.",
-    "Alexa, what's my commute like?",
-    "Alexa, what's the tallest mountain in the world?",
-    "Alexa, what are the Seven Wonders of the World?",
-    "Alexa, tell me a science joke.",
-    "Alexa, how do you make coffee?",
-    "Alexa, what's the nearest gas station?",
-    "Alexa, what are the ingredients in lasagna?",
-    "Alexa, find a yoga routine.",
-    "Alexa, is it going to rain this weekend?",
-    "Alexa, what's the exchange rate for euros?",
-    "Alexa, when's the next full moon?",
-    "Alexa, find a nearby restaurant.",
-    "Alexa, who wrote 'Hamlet'?",
-    "Alexa, how to fix a leaky faucet?",
-    "Alexa, what's a good birthday gift for mom?",
-    "Alexa, what's the Fibonacci sequence?",
-    "Alexa, where's the closest pharmacy?",
-    "Alexa, teach me a Spanish phrase.",
-    "Alexa, how do I tie a bow tie?",
-    "Alexa, what's the atomic number of gold?",
-    "Alexa, what's the distance to Mars?",
-    "Alexa, give me a workout routine.",
-    "Alexa, how do you make sushi?",
-    "Alexa, what's the best way to cook rice?",
-    "Alexa, what's the Pythagorean theorem?",
-    "Alexa, how long does it take to boil eggs?",
-    "Alexa, find me a gluten-free dessert recipe.",
-    "Alexa, what's the longest river in the world?",
-    "Alexa, how to do CPR?",
-    "Alexa, what's a good book to read?",
-    "Alexa, find me a meditation guide.",
-    "Alexa, what's the population of Canada?",
-    "Alexa, how do I change a tire?",
-    "Alexa, what's the quadratic formula?",
-    "Alexa, where's the Great Barrier Reef?",
-    "Alexa, what's the stock price of Apple?",
-    "Alexa, how to get wine stains out?",
-    "Alexa, what's the formula for area of a circle?",
-    "Alexa, when was the Eiffel Tower built?",
-    "Alexa, how to make a paper airplane?",
-    "Alexa, what's the speed of light?",
-    "Alexa, what's a good vegan recipe?",
-    "Alexa, how to relieve a headache?",
-    "Alexa, what are the symptoms of flu?",
-    "Alexa, how to brew green tea?",
-    "Alexa, what's the depth of the ocean?",
-    "Alexa, what's a good podcast to listen to?",
-    "Alexa, how to knit a scarf?",
-    "Alexa, what's the pH of water?",
-    "Alexa, how to make pancakes?",
-    "Alexa, what are the ingredients for a smoothie?",
-    "Alexa, how to meditate?",
-    "Alexa, what's the distance to the nearest star?",
-    "Alexa, give me a random number between 1 and 10.",
-    "Alexa, how to plant tomatoes?",
-    "Alexa, how to bake a cake?",
-    "Alexa, what's the latest technology news?",
-    "Alexa, what's the score of the Lakers game?",
-    "Alexa, how do you say 'thank you' in French?",
-    "Alexa, set a workout reminder for 7 AM tomorrow.",
-    "Alexa, how to remove coffee stains?",
-    "Alexa, what's the life expectancy of an elephant?",
-    "Alexa, what are the best hiking trails nearby?",
-    "Alexa, how many days until Christmas?",
-    "Alexa, what are the latest fashion trends?",
-    "Alexa, how do I make a chocolate milkshake?",
-    "Alexa, tell me about the history of Rome.",
-    "Alexa, how to improve my credit score?",
-    "Alexa, what plants are best for a home garden?",
-    "Alexa, how to make homemade pizza?",
-    "Alexa, what are the health benefits of green tea?",
-    "Alexa, what's the best way to relax after work?",
-    "Alexa, how to organize a small closet?",
-    "Alexa, what are the top-rated movies this year?",
-    "Alexa, give me tips on photography."
-]
+def create_files_from_sentences(input_file_path, output_dir, repeat_count=10):
+    """
+    Reads sentences from an input file and creates multiple files from each sentence.
+    Each file will be numbered sequentially, and each sentence will be repeated in 'repeat_count' files.
+    
+    :param input_file_path: Path to the input text file containing the sentences.
+    :param output_dir: Directory where the output files will be saved.
+    :param repeat_count: The number of files to create for each sentence.
+    """
+    import os
 
-# Function to write each sentence to a separate file in the text_C folder
-def write_sentences_to_files(sentences, folder="text_C"):
-    for i, sentence in enumerate(sentences, 1):
-        with open(f"{folder}/{i}.txt", 'w') as file:
-            file.write(sentence)
+    # Ensure the output directory exists
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
-# Create the folder if it doesn't exist
-import os
-if not os.path.exists('text_C'):
-    os.makedirs('text_C')
+    # Read the content of the input file
+    with open(input_file_path, 'r') as file:
+        sentences = file.readlines()
 
-# Call the function
-write_sentences_to_files(sentences)
+    # Initialize a counter for the output file names
+    file_counter = 1
 
+    # Iterate over each line (sentence) in the input file
+    for sentence in sentences:
+        # Clean up the sentence
+        sentence = sentence.strip()
+        # Skip any empty lines
+        if not sentence:
+            continue
+        # Write the sentence to 'repeat_count' number of files
+        for _ in range(repeat_count):
+            output_file_path = os.path.join(output_dir, f"{file_counter}.txt")
+            with open(output_file_path, 'w') as output_file:
+                output_file.write(sentence + '\n')
+            file_counter += 1
+
+# Example usage
+input_file_path = 'text_total.txt'  
+output_dir = 'text_A'  
+create_files_from_sentences(input_file_path, output_dir)
