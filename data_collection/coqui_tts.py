@@ -16,7 +16,7 @@ models = [
     # "tts_models/en/ljspeech/vits--neon",  # VITS variant trained on LJSpeech
     # "tts_models/en/ljspeech/speedy-speech",  # Speedy Speech model for faster synthesis on LJSpeech
     # "tts_models/en/vctk/fast_pitch",  # Model focusing on pitch control on VCTK
-    # "tts_models/en/ljspeech/tacotron2-DCA",  # Tacotron 2 with duration-controlled attention on LJSpeech
+    "tts_models/en/ljspeech/tacotron2-DCA",  # Tacotron 2 with duration-controlled attention on LJSpeech
     # "tts_models/en/ljspeech/neural_hmm"  # Neural HMM-based model on LJSpeech
 ]
 
