@@ -1,71 +1,50 @@
-import os
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
+import pickle
+import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
-# Function to clean and preprocess text
-def preprocess_text(text):
-    # Add your text preprocessing steps here
-    # Example: Lowercasing and removing punctuation
-    text = text.lower()
-    return text
+def aggregate_traffic_data(traffic_data_tuples):
+    # Aggregate each tuple into a fixed-size feature vector
+    aggregated_features = []
+    for sequence in traffic_data_tuples:
+        if not sequence:  # Skip empty sequences
+            continue
+        # Example: Use mean and std of 'l' values as features
+        l_values = [item[1] for item in sequence]  # Assuming item[1] is the 'l' value
+        mean_l = np.mean(l_values)
+        std_l = np.std(l_values)
+        aggregated_features.append([mean_l, std_l])
+    return np.array(aggregated_features)
 
-# Load and preprocess text data
-def load_text_data(text_directory):
-    text_data = []
-    for filename in os.listdir(text_directory):
-        if filename.endswith('.txt'):
-            file_path = os.path.join(text_directory, filename)
-            with open(file_path, 'r', encoding='utf-8') as file:
-                text = file.read()
-                cleaned_text = preprocess_text(text)
-                text_data.append(cleaned_text)
-    return text_data
+# Load the data from the pickle files
+with open('../data_preprocess/processed_data/vectorized_text_tuples.pkl', 'rb') as f:
+    vectorized_text_tuples = pickle.load(f)
 
-# Load traffic data
-def load_traffic_data(traffic_data_file):
-    return pd.read_csv(traffic_data_file)
+with open('../data_preprocess/processed_data/traffic_data_tuples.pkl', 'rb') as f:
+    traffic_data_tuples = pickle.load(f)
 
-# Main script starts here
-if __name__ == "__main__":
-    # Paths to the text data directory and traffic data file
-    text_directory = '../data_collection/ground_truth/text_A'
-    traffic_data_file = '../data_collection/ground_truth/traffic_W_incoming_timeSeries.csv'
+X = aggregate_traffic_data(traffic_data_tuples)
+y = np.vstack(vectorized_text_tuples)  # Assuming y is correctly shaped
 
-    # Load and preprocess text and traffic data
-    text_data = load_text_data(text_directory)
-    traffic_data = load_traffic_data(traffic_data_file)
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Vectorize the text data
-    vectorizer = TfidfVectorizer(max_features=1000)
-    X = vectorizer.fit_transform(text_data)
-    
-    # Assuming the first column of traffic_data is the target variable
-    y = traffic_data.iloc[:, 0]
-    features = traffic_data.iloc[:, 1:]
+# Initialize the RandomForestRegressor
+model = RandomForestRegressor(n_estimators=100, random_state=42)
 
-    # Combine text features and traffic features
-    X_combined = pd.concat([pd.DataFrame(X.toarray()), features.reset_index(drop=True)], axis=1)
+# Train the model
+model.fit(X_train, y_train)
 
-    # Split the combined dataset into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X_combined, y, test_size=0.2, random_state=42)
+# Make predictions on the test set
+predictions = model.predict(X_test)
 
-    # Initialize the RandomForestRegressor
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
+# Evaluate the model using mean squared error
+mse = mean_squared_error(y_test, predictions)
+print(f"Mean Squared Error: {mse}")
 
-    # Train the model
-    model.fit(X_train, y_train)
+# Save the trained model for later use
+with open('trained_model.pkl', 'wb') as f:
+    pickle.dump(model, f)
 
-    # Make predictions on the test set
-    predictions = model.predict(X_test)
-
-    # Evaluate the model
-    mse = mean_squared_error(y_test, predictions)
-    print(f"Mean Squared Error: {mse}")
-
-    # Save the model and vectorizer for later use
-    # You can use joblib or pickle for this purpose
-    # joblib.dump(model, 'traffic_model.joblib')
-    # joblib.dump(vectorizer, 'text_vectorizer.joblib')
+print("Training completed and model saved to 'trained_model.pkl'")
