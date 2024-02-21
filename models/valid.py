@@ -31,13 +31,29 @@ def aggregate_traffic_data(traffic_data_sequence):
     std_l = np.std(l_values)
     return np.array([[mean_l, std_l]])
 
+def load_traffic_data_from_pickle(pickle_file_path, index):
+    # Load the traffic data tuples from the pickle file
+    with open(pickle_file_path, 'rb') as f:
+        traffic_data_tuples = pickle.load(f)
+    
+    # Access the specific traffic data tuple by index
+    specific_traffic_data = traffic_data_tuples[index]
+    
+    return specific_traffic_data
+
+# Usage
+pickle_file_path = '../data_preprocess/processed_data/traffic_data_tuples.pkl'
+index_to_access = 0  # Replace with the index of the data you want to use
+traffic_data_at_index = load_traffic_data_from_pickle(pickle_file_path, index_to_access)
+
+
 
 # Prepare new input data (this should be replaced with actual new data)
 # Here, we're simulating a new traffic data sequence
-new_traffic_data_sequence = [(1, 2.5, 0), (2, 3.0, 0), (3, 2.8, 0)]  # Example new traffic data
+# new_traffic_data_sequence = [(1, 2.5, 0), (2, 3.0, 0), (3, 2.8, 0)]  # Example new traffic data
 
 # Prepare the input data in the same way as during training
-X_new = aggregate_traffic_data(new_traffic_data_sequence)
+X_new = aggregate_traffic_data(traffic_data_at_index)
 
 # Use the model to make predictions
 predicted_vectorized_text = model.predict(X_new)
