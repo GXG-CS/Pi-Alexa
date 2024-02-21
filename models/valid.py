@@ -47,7 +47,3 @@ predicted_text = inverse_transform(predicted_vectorized_text, vectorizer)
 
 # Output the predicted text
 print(predicted_text)
-
-# The predicted_vectorized_text now contains the predicted output, which might need further
-# processing depending on your application. For example, if your model predicts vectorized text,
-# you might want to convert it back to text using the inverse transformation of your vectorization.
