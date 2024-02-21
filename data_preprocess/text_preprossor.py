@@ -18,26 +18,26 @@ def clean_text(text):
     return text
 
 def load_and_preprocess_text_data(directory_path):
-    """
-    Load text files from a directory, clean, and vectorize the text data
-    """
+    # Get all text files and sort them by the numeric value in the filename
+    file_paths = sorted(
+        [os.path.join(directory_path, filename) for filename in os.listdir(directory_path) if filename.endswith('.txt')],
+        key=lambda x: int(os.path.splitext(os.path.basename(x))[0])
+    )
+
     text_data = []
     file_names = []
 
     # Load and clean text data
-    for filename in os.listdir(directory_path):
-        if filename.endswith('.txt'):
-            file_path = os.path.join(directory_path, filename)
-            with open(file_path, 'r', encoding='utf-8') as file:
-                text = file.read()
-                cleaned_text = clean_text(text)
-                text_data.append(cleaned_text)
-                file_names.append(filename)
+    for file_path in file_paths:
+        print(f"Loading file: {file_path}")  # Print the current file name
+        with open(file_path, 'r', encoding='utf-8') as file:
+            text = file.read()
+            cleaned_text = clean_text(text)
+            text_data.append(cleaned_text)
+            file_names.append(os.path.basename(file_path))
     
     # Convert text data into DataFrame
-    df = pd.DataFrame({'filename': file_names, 'text': text_data})
-    
-    return df
+    return pd.DataFrame({'filename': file_names, 'text': text_data})
 
 def vectorize_text(df, max_features=1000):
     """
