@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 import os
+import pickle
 
 def clean_text(text):
     """
@@ -47,14 +48,16 @@ def vectorize_text(df, max_features=1000):
     feature_names = vectorizer.get_feature_names_out()
     return pd.DataFrame(tfidf_matrix.toarray(), columns=feature_names)
 
-# Example usage
 if __name__ == "__main__":
     directory_path = '../data_collection/ground_truth/text_A'
     df = load_and_preprocess_text_data(directory_path)
-    vectorized_text = vectorize_text(df)
-    print(vectorized_text.head())
-    # Set option to display all rows
-    # pd.set_option('display.max_rows', None)
+    vectorized_text_df = vectorize_text(df)
     
-    # Print the entire DataFrame
-    # print(vectorized_text)
+    # Convert the DataFrame into a list of tuples
+    vectorized_text_tuples = list(vectorized_text_df.itertuples(index=False, name=None))
+    
+    # Save the list of tuples using pickle
+    with open('processed_data/vectorized_text_tuples.pkl', 'wb') as f:
+        pickle.dump(vectorized_text_tuples, f)
+
+    print("Vectorized text data has been saved to 'processed_data/vectorized_text_tuples.pkl'")
