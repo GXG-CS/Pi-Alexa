@@ -43,13 +43,12 @@ def load_traffic_data_from_pickle(pickle_file_path, index):
 
 # Usage
 pickle_file_path = '../data_preprocess/processed_data/traffic_data_tuples.pkl'
-index_to_access = 0  # Replace with the index of the data you want to use
+index_to_access = 5  
 traffic_data_at_index = load_traffic_data_from_pickle(pickle_file_path, index_to_access)
 
 
 
 # Prepare new input data (this should be replaced with actual new data)
-# Here, we're simulating a new traffic data sequence
 # new_traffic_data_sequence = [(1, 2.5, 0), (2, 3.0, 0), (3, 2.8, 0)]  # Example new traffic data
 
 # Prepare the input data in the same way as during training
