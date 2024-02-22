@@ -1,43 +1,22 @@
-
-# Data Collection Scripts Analysis
+# Data Collection Component
 
 ## Overview
+The data collection component is responsible for gathering the necessary data to train the model that infers interactions with Alexa. This involves establishing a secure connection between a MAC and a Raspberry Pi to capture traffic data, converting audio responses to text, and preparing the data for analysis.
 
-This document provides an overview and analysis of three Python scripts found within the `data_collection` directory, extracted from `data_collection.zip`. These scripts are part of a project focused on network traffic analysis and audio recording, potentially for analyzing interactions with devices like Alexa Echo Dot.
+## Scripts Description
 
-## 1. `detect_traffic.py`
+- `audio2text.py`: Converts recorded Alexa response audio files into text files. This is crucial for creating datasets that pair spoken commands with their text representation.
 
-### Purpose
-The script uses the Scapy library for network traffic analysis, specifically monitoring traffic related to a specified IP address.
+- `coqui_tts.py`: Uses the Coqui TTS library to synthesize speech from text. This allows for the generation of voice commands that can be used to interact with Alexa.
 
-### Key Components
-- **start_traffic_detection Function**: Main function to start traffic detection.
-- **Traffic Detection Logic**: Analyzes network packets to count those related to the specified IP.
-- **Packets Per Second Calculation**: Calculates packets per second for monitored IP traffic.
-- **is_target_packet Function**: Checks if a packet is related to the specified IP.
+- `dataCollector2.py`: Establishes an SSH connection between a MAC and a Raspberry Pi, which is configured as an OpenWRT VPN-enabled router. It plays voice command audio files to interact with Alexa on the MAC, records Alexa's responses, and controls the capture of traffic data on the Raspberry Pi automatically.
 
-## 2. `recording.py`
+- `parallel_coqui_tts.py`: Runs the text-to-speech (TTS) synthesis in parallel using `torch.multiprocessing` to improve efficiency when generating large datasets.
 
-### Purpose
-Implements audio recording using the PyAudio library.
+- `pcap2csv.py`: Converts captured traffic data in PCAP format to CSV for further analysis. This transformation is essential for data preprocessing and model input.
 
-### Key Components
-- **record_audio Function**: Primary function for recording audio.
-- **Audio Recording Setup**: Sets up parameters like format, channels, sample rate, and frames per buffer.
-- **Recording Process**: Records audio for a specified duration and stores the data.
-- **Saving Recorded Audio**: Saves the audio as a WAV file.
+- `plot_traffic.py`: Provides visualization of the traffic data, offering insights into the patterns of data exchange between Alexa and the network.
 
-## 3. `data_collection.py`
+- `traffic_analyze.py`: Transforms traffic data in CSV format into time series data, preparing the dataset for time series analysis and model training.
 
-### Purpose
-Integrates the functionalities of traffic detection and potentially audio recording.
-
-### Key Components
-- **Importing Functions**: Imports traffic detection and potentially audio recording functions.
-- **Parameters for Detection and Recording**: Defines network interface and IP address to monitor, with placeholders for audio recording parameters.
-- **monitor_traffic_and_record Function**: Initiates traffic detection in a separate thread.
-- **Thread Management and Conditional Logic**: Uses threading for independent traffic detection and placeholders for event-based triggers.
-- **Flexibility for Further Development**: Structured for easy addition of further logic and integration.
-
-## Conclusion
-The scripts are part of a system designed to monitor network traffic and potentially trigger audio recordings in response to specific network events, likely for analyzing interactions with Alexa Echo Dot devices.
+- `traffic_filter.py`: Filters raw traffic data to isolate the exchanges between Alexa and the VPN, ensuring the dataset focuses on relevant interactions.
