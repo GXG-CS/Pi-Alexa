@@ -47,6 +47,8 @@ def record_audio(filename, duration=5, fs=44100, channels=1):
 
 def play_and_record(ssh, audio_file, audio_dir, record_dir_base, record_duration, repetitions):
     audio_file_base_name = os.path.splitext(audio_file)[0]
+    ssh.execute_command(f"mount /dev/mmcblk0p3 /opt")  
+    
     # Create a unique directory for each audio file's recordings
     record_dir = os.path.join(record_dir_base, audio_file_base_name)
     if not os.path.exists(record_dir):
